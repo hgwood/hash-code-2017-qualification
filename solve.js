@@ -19,16 +19,25 @@ module.exports = function solve (problem) {
     endpointsCachedVideos[endpoint.index] = []
   })
 
+  const videosLatencyByEnpoint = _.mapValues(
+    _.groupBy(problem.requests, 'endpoint'),
+    requests => _.mapValues(
+      _.keyBy(requests, 'video'),
+      request => _.find(problem.endpoints, { index: request.endpoint }).datacenterLatency
+    )
+  )
+
   let requestsWithCacheServer = _.map(requestByPopularity, request => {
     const video = _.find(problem.videos, {index: request.video})
 
     let cacheServersByEndPoint = getCacheServersByEndpoint(problem, request.endpoint)
-    cacheServersByEndPoint = _.filter(cacheServersByEndPoint, ({id}) => {
+    cacheServersByEndPoint = _.filter(cacheServersByEndPoint, ({ id, latency }) => {
       const cacheServer = _.find(cacheServers, {id})
       return cacheServer &&
         cacheServer.capacity >= video.size &&
         !_.includes(cacheServer.videos, video.index) &&
-        !_.includes(endpointsCachedVideos[request.endpoint], video.index)
+        !_.includes(endpointsCachedVideos[request.endpoint], video.index) &&
+        latency < videosLatencyByEnpoint[request.endpoint][video.index]
     })
     cacheServersByEndPoint = _.sortBy(cacheServersByEndPoint, 'latency')
 
