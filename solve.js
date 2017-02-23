@@ -35,8 +35,8 @@ module.exports = function solve (problem) {
       const cacheServer = _.find(cacheServers, {id})
       return cacheServer &&
         cacheServer.capacity >= video.size &&
-        !_.includes(cacheServer.videos, video.index) &&
-        // !_.includes(endpointsCachedVideos[request.endpoint], video.index) &&
+        // !_.includes(cacheServer.videos, video.index) &&
+        !_.includes(endpointsCachedVideos[request.endpoint], video.index) &&
         latency < videosLatencyByEnpoint[request.endpoint][video.index]
     })
     cacheServersByEndPoint = _.sortBy(cacheServersByEndPoint, 'latency')
