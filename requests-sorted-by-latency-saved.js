@@ -12,6 +12,7 @@ module.exports = function requestsSortedByLatencySaved (problem, latencies) {
       const cache = _(endpoint.cacheServers)
         .filter(cache => cache.latency < latency)
         .min('latency')
+      if (!cache) return
       return {
         video: request.video,
         endpoint: endpoint.index,
@@ -20,6 +21,7 @@ module.exports = function requestsSortedByLatencySaved (problem, latencies) {
         savedLatency: request.popularity * (latency - cache.latency)
       }
     })
+    .compact()
     .orderBy(['savedLatency'], ['desc'])
     .value()
 }
