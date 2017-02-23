@@ -30,8 +30,8 @@ const authorizationHeader = {'Authorization': `Bearer ${authToken}`}
 const dataSets = {
   // kittens: 4881867933220864,
   // me_at_the_zoo: 5570727000408064
-  trending_today: 4919276561498112
-  // videos_worth_spreading: 6412425163177984
+  trending_today: 4919276561498112,
+  videos_worth_spreading: 6412425163177984
 }
 
 const solutionSchema = joi.object().min(2)
