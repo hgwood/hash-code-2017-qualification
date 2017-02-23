@@ -28,7 +28,7 @@ module.exports = function solve (problem) {
 
   const requestByPopularity = requestsSortedByLatencySaved(problem, videosLatencyByEnpoint)//_.orderBy(problem.requests, ['popularity'], ['desc'])
 
-  let requestsWithCacheServer = _.map(requestByPopularity, request => {
+  let requestsWithCacheServer = _.map(requestByPopularity, (request, index) => {
     const video = _.find(problem.videos, {index: request.video})
 
     let cacheServersByEndPoint = getCacheServersByEndpoint(problem, request.endpoint)
@@ -49,6 +49,7 @@ module.exports = function solve (problem) {
       cacheServer2.videos.push(video.index)
       endpointsCachedVideos[request.endpoint].push(video.index)
       videosLatencyByEnpoint[request.endpoint][request.video] = request.latency
+      requestByPopularity[index + 1] = requestsSortedByLatencySaved(problem, videosLatencyByEnpoint)[0]
       return {
         request,
         cacheServer
