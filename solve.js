@@ -14,13 +14,21 @@ module.exports = function solve (problem) {
     'id'
   )
 
+  const endpointsCachedVideos = {}
+  problem.endpoints.forEach(endpoint => {
+    endpointsCachedVideos[endpoint.index] = []
+  })
+
   let requestsWithCacheServer = _.map(requestByPopularity, request => {
     const video = _.find(problem.videos, {index: request.video})
 
     let cacheServersByEndPoint = getCacheServersByEndpoint(problem, request.endpoint)
     cacheServersByEndPoint = _.filter(cacheServersByEndPoint, ({id}) => {
       const cacheServer = _.find(cacheServers, {id})
-      return cacheServer && cacheServer.capacity >= video.size && !_.includes(cacheServer.videos, video.index)
+      return cacheServer &&
+        cacheServer.capacity >= video.size &&
+        !_.includes(cacheServer.videos, video.index) &&
+        !_.includes(endpointsCachedVideos[request.endpoint], video.index)
     })
     cacheServersByEndPoint = _.sortBy(cacheServersByEndPoint, 'latency')
 
@@ -29,6 +37,7 @@ module.exports = function solve (problem) {
       const cacheServer2 = _.find(cacheServers, {id: cacheServer.id})
       cacheServer2.capacity -= video.size
       cacheServer2.videos.push(video.index)
+      endpointsCachedVideos[request.endpoint].push(video.index)
       return {
         request,
         cacheServer
