@@ -48,6 +48,7 @@ module.exports = function solve (problem) {
       cacheServer2.capacity -= video.size
       cacheServer2.videos.push(video.index)
       endpointsCachedVideos[request.endpoint].push(video.index)
+      videosLatencyByEnpoint[request.endpoint][request.video] = request.latency
       return {
         request,
         cacheServer
