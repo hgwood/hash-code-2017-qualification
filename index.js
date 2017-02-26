@@ -4,7 +4,7 @@ const _ = require('lodash')
 const glob = require('glob')
 const read = require('./read')
 const write = require('./write')
-const solve = require('./solve')
+const solve = require('./solve3')
 
 const files = _(process.argv)
   .slice(2)

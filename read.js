@@ -16,7 +16,9 @@ module.exports = function read (filePath) {
     fs.writeFileSync(`${filePath}.json`, JSON.stringify(result))
     return result
   }
-  return require(`./${cachedFile}`)
+  const result = require(`./${cachedFile}`)
+  debug('end')
+  return result
 }
 
 function parse (textFromInputFile) {
