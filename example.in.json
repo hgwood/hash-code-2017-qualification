@@ -27,6 +27,7 @@
         {"index": 0, "video": 3, "endpoint": 0, "popularity": 1500},
         {"index": 1, "video": 0, "endpoint": 1, "popularity": 1000},
         {"index": 2, "video": 4, "endpoint": 0, "popularity": 500},
-        {"index": 3, "video": 1, "endpoint": 0, "popularity": 1000}
+        {"index": 3, "video": 1, "endpoint": 0, "popularity": 1000},
+        {"index": 5, "video": 0, "endpoint": 0, "popularity": 1000}
       ]
     }
