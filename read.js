@@ -26,7 +26,7 @@ function parse (textFromInputFile) {
     save('nvideos'),
     save('nendpoints'),
     save('nrequestDescriptions'),
-    save('ncacheServers'),
+    'ncacheServers',
     'cacheServerCapacity',
     n('videos', {length: 'nvideos', indices: true}, 'size'),
     n('endpoints', {length: 'nendpoints', indices: true}, 'datacenterLatency', save('navailableCaches'),
