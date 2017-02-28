@@ -35,6 +35,7 @@ module.exports = function solve (problem) {
     // return caches.concat(_.map(endpoint.cacheServers, ({id, latency}) => ({id, latency, endpoint: endpoint.index})))
   }, {})
   // debug(c)
+  debug('precalculations end')
   return _(c)
     .mapValues(cache => y(cache.capacity, cache.videos))
     .map((solution, id) => ({id, videos: _.map(solution.cachedVideos, 'id')}))
@@ -90,11 +91,14 @@ function x (capacity, videos) {
 }
 
 function y (capacity, videos) {
+  debug('finding smallest video')
   const smallestVideo = _.minBy(videos, 'size')
+  debug('filtering videos')
   videos = _(videos)
     .filter(video => video.size <= capacity)
     .keyBy('id')
     .value()
+  debug('initializing states')
   const initialState = {
     cachedVideos: [],
     uncachedVideos: videos,
@@ -108,11 +112,13 @@ function y (capacity, videos) {
       score: video.score
     }
   })
+  debug('starting iteration')
   _.times(capacity + 1 - smallestVideo.size, i => {
     if (!states[i]) return
+    debug('iteration', i)
     const {cachedVideos, uncachedVideos, score} = states[i]
     _(uncachedVideos)
-      .filter(video => video.size <= i)
+      .filter(video => i + video.size <= capacity)
       .forEach(video => {
         const existingState = states[i + video.size] || {score: 0}
         const newState = {
@@ -122,7 +128,9 @@ function y (capacity, videos) {
         }
         states[i + video.size] = _.maxBy([existingState, newState], 'score')
       })
+    debug('iteration', i, 'end')
   })
   // debug(states)
+  debug('finding max')
   return _(states).values().maxBy('score')
 }
